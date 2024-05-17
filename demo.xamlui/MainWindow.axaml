@@ -1,0 +1,44 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:model="clr-namespace:Demo.XamlUi.Model"
+        xmlns:converters="clr-namespace:Demo.XamlUi.Converters"
+        xmlns:views1="clr-namespace:Demo.XamlUi.Views"
+        mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="300"
+        x:DataType="model:Context"
+        x:Class="Demo.XamlUi.MainWindow"
+        Title="Demo XAML UI">
+    <Window.Resources>
+        <converters:GenderConverter x:Key="GenderConverter" />
+    </Window.Resources>
+    <SplitView IsPaneOpen="True" DisplayMode="Inline" OpenPaneLength="300">
+        <SplitView.Pane>
+            <Grid Margin="10" ColumnDefinitions="*" RowDefinitions="Auto, *">
+                <StackPanel Orientation="Horizontal">
+                    <Button Classes="positive small" Name="AddBtn">+</Button>
+                    <Button Classes="negative small" Command="{Binding RemoveSelected}">-</Button>
+                    <ThemeVariantScope RequestedThemeVariant="Dark">
+                        <Button>Dark</Button>
+                    </ThemeVariantScope>
+                </StackPanel>
+                <ListBox Grid.Row="1" Name="PeopleList" SelectionMode="Single"
+                         ItemsSource="{Binding Persons}"
+                         SelectedValue="{Binding SelectedPerson}"
+                         BorderBrush="Gray" BorderThickness="1">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="(" />
+                                <TextBlock Text="{Binding Gender, Converter={StaticResource GenderConverter}}" />
+                                <TextBlock Text=")" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </SplitView.Pane>
+        <views1:DetailView Margin="20" DataContext="{Binding SelectedPerson}"></views1:DetailView>
+    </SplitView>
+</Window>
